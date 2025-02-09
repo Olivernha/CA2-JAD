@@ -3,12 +3,15 @@ FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
 # Copy Maven wrapper and pom.xml
-COPY mvnw pom.xml .
-COPY .mvn .mvn
+COPY mvnw pom.xml .  
+COPY .mvn .mvn  
+
+# Grant execution permission to Maven wrapper  
+RUN chmod +x mvnw  
 
 # Copy source code and build the application
-COPY src src
-RUN ./mvnw package -DskipTests
+COPY src src  
+RUN ./mvnw package -DskipTests  
 
 # Use a minimal runtime image
 FROM eclipse-temurin:21-jre
