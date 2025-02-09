@@ -11,7 +11,9 @@ RUN chmod +x mvnw
 
 # Copy source code and build the application
 COPY src src  
-RUN ./mvnw package -DskipTests  
+
+# Use `sh mvnw` instead of `./mvnw` to avoid permission issues
+RUN sh mvnw package -DskipTests  
 
 # Use a minimal runtime image
 FROM eclipse-temurin:21-jre
