@@ -37,7 +37,8 @@ public class ServiceDAO {
         List<Service> services = new ArrayList<>();
         String sql = "SELECT s.*, sc.category_name AS category_name FROM service s JOIN service_category sc ON s.category_id = sc.category_id WHERE s.category_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, categoryId);
+            // Convert categoryId from String to int
+            stmt.setInt(1, Integer.parseInt(categoryId));
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     services.add(mapResultSetToService(rs));
@@ -45,10 +46,11 @@ public class ServiceDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace(); // Handle invalid number format
         }
         return services;
     }
-
     // Add a new service
     public boolean addService(Service service) {
         String sql = "INSERT INTO service (category_id, service_name, description, price, image_path, is_available,discount,service_rating) VALUES (?, ?, ?, ?, ?, ?,?,?)";
